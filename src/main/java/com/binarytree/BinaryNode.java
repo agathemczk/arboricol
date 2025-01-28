@@ -1,13 +1,15 @@
 package com.binarytree;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
 class BinaryNode<E extends Comparable<E>> {
     private static final String GAP_START_LEFT = "╭";
     private static final String GAP_START_RIGHT = "╰";
     private static final String GAP = " ";
     private static final String GAP_END = "─";
+    @Getter
     private E value;
+    @Getter
+    private int balanceFactor;
     private BinaryNode<E> left;
     private BinaryNode<E> right;
 
@@ -15,20 +17,21 @@ class BinaryNode<E extends Comparable<E>> {
         this.value = value;
         this.left = null;
         this.right = null;
+        this.balanceFactor = 0;
     }
 
-    BinaryNode<E> add(final E value) {
+    void add(final E value) {
         switch (value.compareTo(this.value)) {
-            case 1 -> {
-                this.right = this.add(this.right, value);
-                return this.right;
-            }
-            case -1 -> {
-                this.left = this.add(this.left, value);
-                return this.left;
-            }
+            case 1 -> this.right = this.add(this.right, value);
+            case -1 -> this.left = this.add(this.left, value);
         }
-        return this;
+    }
+
+    private BinaryNode<E> add(final BinaryNode<E> child, final E value) {
+        if (child == null) return new BinaryNode<>(value);
+        child.add(value);
+        this.calculateBalanceFactor();
+        return child;
     }
 
     private static <E extends Comparable<E>> int getHeight(final BinaryNode<E> child) {
@@ -36,18 +39,12 @@ class BinaryNode<E extends Comparable<E>> {
         return child.getHeight();
     }
 
-    private BinaryNode<E> add(final BinaryNode<E> child, final E value) {
-        if (child == null) return new BinaryNode<>(value);
-        child.add(value);
-        return child;
-    }
-
     @Override
     public String toString() {
         return "BinaryNode{" +
                 "value=" + this.getValue() +
-                ", left=" + this.getLeft() +
-                ", right=" + this.getRight() +
+                ", left=" + this.left +
+                ", right=" + this.right +
                 '}';
     }
 
@@ -72,6 +69,7 @@ class BinaryNode<E extends Comparable<E>> {
             stringBuilder.append(BinaryNode.GAP_END);
         }
         stringBuilder.append(this.value);
+        stringBuilder.append("(").append(this.balanceFactor).append(")");
         stringBuilder.append("\n");
         if (this.right != null) stringBuilder.append(this.right.toTreeString(gap + 1, false));
 
@@ -83,8 +81,8 @@ class BinaryNode<E extends Comparable<E>> {
                 BinaryNode.getHeight(this.right));
     }
 
-    int getBalanceFactor(){
-        return 0;
+    private void calculateBalanceFactor(){
+        this.balanceFactor = BinaryNode.getHeight(this.right) - BinaryNode.getHeight(this.left);
     }
 
 }
