@@ -85,4 +85,14 @@ class BinaryNode<E extends Comparable<E>> {
         this.balanceFactor = BinaryNode.getHeight(this.right) - BinaryNode.getHeight(this.left);
     }
 
+    public static <E extends Comparable<E>> boolean isAVL(final BinaryNode<E> node) {
+        if (node == null) return true;
+        return node.isAVL();
+    }
+
+    private boolean isAVL() {
+        if(Math.abs(this.balanceFactor) > 1) return false;
+        return BinaryNode.isAVL(this.left) && BinaryNode.isAVL(this.right);
+    }
+
 }

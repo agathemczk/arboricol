@@ -39,4 +39,8 @@ public class BinaryTree<E extends Comparable<E>> {
         return this.root.getHeight();
     }
 
+    public final boolean isAVL() {
+        return BinaryNode.isAVL(this.root);
+    }
+
 }
