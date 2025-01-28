@@ -7,5 +7,7 @@ public class Main {
         System.out.println(myBinaryTree.toTreeString());
         System.out.println("Hauteur de l'arbre : " + myBinaryTree.getHeight());
         System.out.println("Arbre AVL ? " + myBinaryTree.isAVL());
+        myBinaryTree.testRotate();
+        System.out.println(myBinaryTree.toTreeString());
     }
 }
