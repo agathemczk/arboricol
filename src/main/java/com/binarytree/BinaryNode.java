@@ -34,6 +34,27 @@ class BinaryNode<E extends Comparable<E>> {
         return child;
     }
 
+    public StringBuilder prefix(final StringBuilder sb) {
+        sb.append(this.value).append(" ");
+        if (this.left != null) this.left.prefix(sb);
+        if (this.right != null) this.right.prefix(sb);
+        return sb;
+    }
+
+    public StringBuilder postfix(final StringBuilder sb) {
+        if (this.left != null) this.left.prefix(sb);
+        if (this.right != null) this.right.prefix(sb);
+        sb.append(this.value).append(" ");
+        return sb;
+    }
+
+    public StringBuilder infix(final StringBuilder sb) {
+        sb.append(this.value).append(" ");
+        if (this.right != null) this.right.prefix(sb);
+        if (this.left != null) this.left.prefix(sb);
+        return sb;
+    }
+
     private static <E extends Comparable<E>> int getHeight(final BinaryNode<E> child) {
         if (child== null) return 0;
         return child.getHeight();
@@ -95,15 +116,6 @@ class BinaryNode<E extends Comparable<E>> {
         return BinaryNode.isAVL(this.left) && BinaryNode.isAVL(this.right);
     }
 
-    void rotateRightLeftChild() {
-        BinaryNode<E> pivot = this.left;
-        BinaryNode<E> child = BinaryNode.getLeft(pivot);
-        BinaryNode<E> grandChild = BinaryNode.getRight(child);
-        this.left = child;
-        BinaryNode.setRight(child,pivot);
-        BinaryNode.setLeft(pivot,grandChild);
-    }
-
     private static <E extends Comparable<E>> void setLeft(final BinaryNode<E> node, final BinaryNode<E> child) {
         if (node == null) throw new IllegalArgumentException("node == null");
         node.left = child;
@@ -122,6 +134,15 @@ class BinaryNode<E extends Comparable<E>> {
         return (node == null) ? null : node.left;
     }
 
+    void rotateRightLeftChild() {
+        BinaryNode<E> pivot = this.left;
+        BinaryNode<E> child = BinaryNode.getLeft(pivot);
+        BinaryNode<E> grandChild = BinaryNode.getRight(child);
+        this.left = child;
+        BinaryNode.setRight(child,pivot);
+        BinaryNode.setLeft(pivot,grandChild);
+    }
+
     void rotateLeftLeftChild() {
         BinaryNode<E> pivot = this.left;
         BinaryNode<E> child = BinaryNode.getRight(pivot);
@@ -130,5 +151,25 @@ class BinaryNode<E extends Comparable<E>> {
         BinaryNode.setLeft(child,pivot);
         BinaryNode.setRight(pivot,grandChild);
     }
+
+    /*
+    void rotateRightRightChild() {
+        BinaryNode<E> pivot = this.right;
+        BinaryNode<E> child = BinaryNode.getLeft(pivot);
+        BinaryNode<E> grandChild = BinaryNode.getRight(child);
+        this.right = child;
+        BinaryNode.setRight(child,pivot);
+        BinaryNode.setLeft(pivot,grandChild);
+    }
+
+    void rotateLeftRightChild() {
+        BinaryNode<E> pivot = this.right;
+        BinaryNode<E> child = BinaryNode.getLeft(pivot);
+        BinaryNode<E> grandChild = BinaryNode.getRight(child);
+        this.right = child;
+        BinaryNode.setLeft(child,pivot);
+        BinaryNode.setRight(pivot,grandChild);
+    }
+    */
 
 }
